@@ -1,4 +1,5 @@
 // Navigation
+import { Analytics } from "@vercel/analytics/next"
 document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
