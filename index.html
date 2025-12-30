@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoSmart Home Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">🌱 EcoSmart</h1>
+            <ul class="nav-menu">
+                <li><a href="#dashboard" class="nav-link active">Dashboard</a></li>
+                <li><a href="#energy-calc" class="nav-link">Energy Calculator</a></li>
+                <li><a href="#habits" class="nav-link">Habit Tracker</a></li>
+                <li><a href="#carbon" class="nav-link">Carbon Footprint</a></li>
+                <li><a href="#commute" class="nav-link">Commute Planner</a></li>
+                <li><a href="#solar" class="nav-link">Solar ROI</a></li>
+                <li><a href="#tips" class="nav-link">Tips & News</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section active">
+            <div class="container">
+                <h2>Energy & Sustainability Dashboard</h2>
+                <p class="subtitle">Your complete guide to sustainable living</p>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Daily Energy</h3>
+                        <p class="stat-value" id="totalDailyEnergy">0</p>
+                        <p class="stat-label">kWh/day</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Monthly Energy</h3>
+                        <p class="stat-value" id="totalMonthlyEnergy">0</p>
+                        <p class="stat-label">kWh/month</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Green Points</h3>
+                        <p class="stat-value" id="totalGreenPoints">0</p>
+                        <p class="stat-label">points this week</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>CO₂ Footprint</h3>
+                        <p class="stat-value" id="totalCO2">0</p>
+                        <p class="stat-label">tons/year</p>
+                    </div>
+                </div>
+
+                <div class="chart-grid">
+                    <div class="chart-container">
+                        <h3>Energy Usage by Appliance</h3>
+                        <canvas id="dashboardEnergyChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Weekly Green Habits Progress</h3>
+                        <canvas id="dashboardHabitsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Energy Calculator Section -->
+        <section id="energy-calc" class="section">
+            <div class="container">
+                <h2>Energy Consumption Calculator</h2>
+                <p class="subtitle">Track your appliance energy usage</p>
+
+                <div class="calculator-card">
+                    <form id="applianceForm">
+                        <div class="form-group">
+                            <label>Appliance Name</label>
+                            <input type="text" id="applianceName" required placeholder="e.g., Refrigerator">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Wattage (W)</label>
+                                <input type="number" id="applianceWatts" required placeholder="e.g., 150">
+                            </div>
+                            <div class="form-group">
+                                <label>Hours/Day</label>
+                                <input type="number" id="applianceHours" required step="0.1" placeholder="e.g., 24">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Appliance</button>
+                    </form>
+
+                    <div id="applianceList" class="appliance-list"></div>
+
+                    <div class="results">
+                        <h3>Total Energy Consumption</h3>
+                        <p>Daily: <strong id="dailyTotal">0 kWh</strong></p>
+                        <p>Monthly: <strong id="monthlyTotal">0 kWh</strong></p>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="energyChart"></canvas>
+                    </div>
+
+                    <div class="tips-box">
+                        <h4>💡 Energy Saving Tips</h4>
+                        <ul id="energyTips"></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Habit Tracker Section -->
+        <section id="habits" class="section">
+            <div class="container">
+                <h2>Green Habit Tracker</h2>
+                <p class="subtitle">Gamify your eco-friendly lifestyle</p>
+
+                <div class="calculator-card">
+                    <div class="habit-score">
+                        <h3>This Week's Score: <span id="weeklyScore">0</span> points</h3>
+                        <div class="progress-bar">
+                            <div id="progressFill" class="progress-fill"></div>
+                        </div>
+                        <p>Goal: 70 points</p>
+                    </div>
+
+                    <div class="habits-grid" id="habitsGrid"></div>
+
+                    <button class="btn btn-secondary" onclick="resetWeek()">Reset Week</button>
+
+                    <div class="chart-container">
+                        <canvas id="habitsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Carbon Footprint Section -->
+        <section id="carbon" class="section">
+            <div class="container">
+                <h2>Household Carbon Footprint Calculator</h2>
+                <p class="subtitle">Measure your climate impact</p>
+
+                <div class="calculator-card">
+                    <form id="carbonForm">
+                        <div class="form-group">
+                            <label>Annual Electricity (kWh)</label>
+                            <input type="number" id="electricityKwh" placeholder="e.g., 10000">
+                        </div>
+                        <div class="form-group">
+                            <label>Annual Car Distance (km)</label>
+                            <input type="number" id="carKm" placeholder="e.g., 15000">
+                        </div>
+                        <div class="form-group">
+                            <label>Diet Type</label>
+                            <select id="dietType">
+                                <option value="2500">Meat-heavy (2500 kg CO₂/year)</option>
+                                <option value="1500">Moderate meat (1500 kg CO₂/year)</option>
+                                <option value="1000">Vegetarian (1000 kg CO₂/year)</option>
+                                <option value="700">Vegan (700 kg CO₂/year)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Annual Flights (hours)</label>
+                            <input type="number" id="flightHours" placeholder="e.g., 10">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Calculate Footprint</button>
+                    </form>
+
+                    <div id="carbonResults" class="results" style="display:none;">
+                        <h3>Your Annual CO₂ Footprint</h3>
+                        <p class="large-result"><strong id="totalCO2Result">0</strong> tons CO₂/year</p>
+                        
+                        <div class="chart-container">
+                            <canvas id="carbonChart"></canvas>
+                        </div>
+
+                        <div class="tips-box">
+                            <h4>🌍 Suggestions to Reduce Your Footprint</h4>
+                            <ul id="carbonTips"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Commute Planner Section -->
+        <section id="commute" class="section">
+            <div class="container">
+                <h2>Green Commute Planner</h2>
+                <p class="subtitle">Compare transport emissions</p>
+
+                <div class="calculator-card">
+                    <form id="commuteForm">
+                        <div class="form-group">
+                            <label>Trip Distance (km)</label>
+                            <input type="number" id="tripDistance" required placeholder="e.g., 20">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Compare Modes</button>
+                    </form>
+
+                    <div id="commuteResults" class="results" style="display:none;">
+                        <h3>Emission Comparison</h3>
+                        <div id="commuteComparison"></div>
+
+                        <div class="chart-container">
+                            <canvas id="commuteChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Solar ROI Section -->
+        <section id="solar" class="section">
+            <div class="container">
+                <h2>Home Solar ROI Calculator</h2>
+                <p class="subtitle">Estimate your solar panel payback</p>
+
+                <div class="calculator-card">
+                    <form id="solarForm">
+                        <div class="form-group">
+                            <label>System Cost ($)</label>
+                            <input type="number" id="systemCost" required placeholder="e.g., 15000">
+                        </div>
+                        <div class="form-group">
+                            <label>System Size (kW)</label>
+                            <input type="number" id="systemSize" required step="0.1" placeholder="e.g., 6">
+                        </div>
+                        <div class="form-group">
+                            <label>Average Sun Hours/Day</label>
+                            <input type="number" id="sunHours" required step="0.1" placeholder="e.g., 5">
+                        </div>
+                        <div class="form-group">
+                            <label>Electricity Rate ($/kWh)</label>
+                            <input type="number" id="electricityRate" required step="0.01" placeholder="e.g., 0.12">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Calculate ROI</button>
+                    </form>
+
+                    <div id="solarResults" class="results" style="display:none;">
+                        <h3>Solar Investment Analysis</h3>
+                        <p>Annual Energy Production: <strong id="annualProduction">0</strong> kWh</p>
+                        <p>Annual Savings: <strong id="annualSavings">$0</strong></p>
+                        <p>Payback Period: <strong id="paybackYears">0</strong> years</p>
+                        <p>25-Year Savings: <strong id="lifetimeSavings">$0</strong></p>
+
+                        <div class="chart-container">
+                            <canvas id="solarChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tips & News Section -->
+        <section id="tips" class="section">
+            <div class="container">
+                <h2>Energy Tips & Green Living</h2>
+                <p class="subtitle">Stay informed and inspired</p>
+
+                <div class="tips-grid">
+                    <article class="tip-card">
+                        <h3>🔌 Switch to LED Bulbs</h3>
+                        <p>LED bulbs use 75% less energy than incandescent bulbs and last 25 times longer. A typical household can save $225 per year by switching all bulbs to LEDs.</p>
+                    </article>
+
+                    <article class="tip-card">
+                        <h3>❄️ Optimize Your Refrigerator</h3>
+                        <p>Keep your refrigerator at 3-5°C and freezer at -18°C. Clean the coils twice a year and ensure door seals are tight to maximize efficiency.</p>
+                    </article>
+
+                    <article class="tip-card">
+                        <h3>🚴 Choose Active Transport</h3>
+                        <p>Walking and cycling produce zero emissions and improve your health. For every kilometer you bike instead of drive, you save about 170g of CO₂.</p>
+                    </article>
+
+                    <article class="tip-card">
+                        <h3>🌡️ Smart Thermostat Usage</h3>
+                        <p>Lower your thermostat by 1°C to reduce heating bills by 10%. Use programmable thermostats to automatically adjust when you're away or sleeping.</p>
+                    </article>
+
+                    <article class="tip-card">
+                        <h3>☀️ Harness Solar Power</h3>
+                        <p>Solar panels can reduce electricity bills by 50-90%. With tax incentives and falling prices, most systems pay for themselves in 6-10 years.</p>
+                    </article>
+
+                    <article class="tip-card">
+                        <h3>🔌 Unplug Vampire Devices</h3>
+                        <p>Electronics on standby still draw power. Unplug chargers, TVs, and computers when not in use, or use power strips to easily cut phantom loads.</p>
+                    </article>
+
+                    <article class="tip-card">
+                        <h3>♻️ Reduce, Reuse, Recycle</h3>
+                        <p>Recycling one aluminum can saves enough energy to run a TV for 3 hours. Composting organic waste reduces methane emissions from landfills.</p>
+                    </article>
+
+                    <article class="tip-card">
+                        <h3>💧 Water Conservation</h3>
+                        <p>Fix leaky faucets and install low-flow showerheads. Heating water accounts for 18% of home energy use, so shorter showers save energy and water.</p>
+                    </article>
+                </div>
+
+                <div class="sdg-section">
+                    <h3>Supporting UN Sustainable Development Goals</h3>
+                    <div class="sdg-grid">
+                        <div class="sdg-card">
+                            <h4>SDG 7: Clean Energy</h4>
+                            <p>Ensure access to affordable, reliable, sustainable and modern energy for all.</p>
+                        </div>
+                        <div class="sdg-card">
+                            <h4>SDG 11: Sustainable Cities</h4>
+                            <p>Make cities inclusive, safe, resilient and sustainable.</p>
+                        </div>
+                        <div class="sdg-card">
+                            <h4>SDG 12: Responsible Consumption</h4>
+                            <p>Ensure sustainable consumption and production patterns.</p>
+                        </div>
+                        <div class="sdg-card">
+                            <h4>SDG 13: Climate Action</h4>
+                            <p>Take urgent action to combat climate change and its impacts.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 EcoSmart Dashboard. Empowering sustainable living through data.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
